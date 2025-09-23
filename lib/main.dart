@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterbloc/bloc/product_bloc.dart';
+import 'package:flutterbloc/bloc/product_event.dart';
 import 'package:flutterbloc/screens/product_screen.dart';
 
 void main() {
@@ -10,11 +13,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Bloc with api',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Colors.blue),
-      home: ProductScreen(),
+    return BlocProvider(
+      create: (context) => ProductBloc()..add(LoadProduct()),
+      child: MaterialApp(
+        title: 'Flutter Bloc with api',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primaryColor: Colors.blue),
+        home: ProductScreen(),
+      ),
     );
   }
 }

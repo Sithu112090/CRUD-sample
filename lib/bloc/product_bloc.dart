@@ -6,8 +6,6 @@ import 'package:flutterbloc/models/product_model.dart';
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   List<Product> products = [];
 
-  int index = 0;
-
   ProductBloc() : super(ProductInitial()) {
     on<LoadProduct>(_onLoadProducts);
     on<AddProduct>(_onAddProduct);
@@ -30,13 +28,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ) async {
     emit(ProductLoading());
     await Future.delayed(Duration(milliseconds: 500));
-    final newProduct = event.product.copyWith(
-      id: index++,
-      name: event.product.name,
-      price: event.product.price,
-      stock: event.product.stock,
-    );
-    products.add(newProduct);
+    products.add(event.product);
     emit(
       ProductOperationSuccess(
         List.from(products),

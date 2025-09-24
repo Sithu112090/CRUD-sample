@@ -14,8 +14,6 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  List<Product> products = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,48 +89,33 @@ class _ProductScreenState extends State<ProductScreen> {
     }
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Search ...',
-              prefixIcon: Icon(Icons.search),
-              contentPadding: EdgeInsets.all(8),
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                Product product = products[index];
+      child: ListView.builder(
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          Product product = products[index];
 
-                return Card(
-                  child: ListTile(
-                    title: Text(product.name),
-                    subtitle: Text(
-                      '${product.price} Ks ~ ${product.stock} Stock',
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () => _editProduct(product),
-                          icon: Icon(Icons.edit),
-                        ),
-                        IconButton(
-                          onPressed: () => _showDeleteDialog(context, product),
-                          icon: Icon(Icons.delete),
-                        ),
-                      ],
-                    ),
+          return Card(
+            child: ListTile(
+              title: Text(product.name),
+              subtitle: Text(
+                '${product.price} Ks ~ ${product.stock} Stock ~ id:${product.id}',
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () => _editProduct(product),
+                    icon: Icon(Icons.edit),
                   ),
-                );
-              },
+                  IconButton(
+                    onPressed: () => _showDeleteDialog(context, product),
+                    icon: Icon(Icons.delete),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

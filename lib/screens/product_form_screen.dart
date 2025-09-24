@@ -40,7 +40,9 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       final newProduct = Product(
-        id: widget.product != null ? widget.product!.id : 0,
+        id: widget.product != null
+            ? widget.product!.id
+            : DateTime.now().microsecondsSinceEpoch.toString(),
         name: _nameController.text,
         price: double.parse(_priceController.text),
         stock: int.parse(_stockController.text),

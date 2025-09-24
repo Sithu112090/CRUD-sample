@@ -6,20 +6,21 @@ import 'package:flutterbloc/bloc/product_state.dart';
 import 'package:flutterbloc/models/product_model.dart';
 import 'package:flutterbloc/screens/product_form_screen.dart';
 
-class ProductScreen extends StatefulWidget {
+class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});
 
-  @override
-  State<ProductScreen> createState() => _ProductScreenState();
-}
-
-class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Products'),
         actions: [
+          IconButton(
+            onPressed: () {
+              context.read<ProductBloc>().add(LoadProduct());
+            },
+            icon: Icon(Icons.refresh),
+          ),
           IconButton(
             onPressed: () {
               Navigator.push(
@@ -96,15 +97,35 @@ class _ProductScreenState extends State<ProductScreen> {
 
           return Card(
             child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: _getStockColor(product.stock),
+                child: _getStockIcon(product.stock),
+              ),
               title: Text(product.name),
-              subtitle: Text(
-                '${product.price} Ks ~ ${product.stock} Stock ~ id:${product.id}',
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Price : ${product.price} Ks'),
+                  Text(
+                    'Stock : ${product.stock}',
+                    style: TextStyle(color: _getStockTextColor(product.stock)),
+                  ),
+                  Text('id : ${product.id}'),
+                ],
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    onPressed: () => _editProduct(product),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProductFormScreen(product: product),
+                        ),
+                      );
+                    },
                     icon: Icon(Icons.edit),
                   ),
                   IconButton(
@@ -120,12 +141,21 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  void _editProduct(Product product) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ProductFormScreen(product: product),
-      ),
-    );
+  Icon _getStockIcon(int stock) {
+    if (stock > 20) return Icon(Icons.category);
+    return Icon(Icons.warning);
+  }
+
+  Color _getStockColor(int stock) {
+    if (stock > 20) return Colors.green;
+    if (stock > 10) return Colors.orange;
+    return Colors.red;
+  }
+
+  Color _getStockTextColor(int stock) {
+    if (stock > 20) return Colors.green;
+    if (stock > 10) return Colors.orange;
+    return Colors.red;
   }
 
   void _showDeleteDialog(BuildContext context, Product product) {
